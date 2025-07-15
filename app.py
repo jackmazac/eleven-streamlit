@@ -22,7 +22,7 @@ if not st.session_state.authenticated:
     
     # Login button
     if st.button("Login", type="primary"):
-        if password == "commanders-suck":
+        if password == "fsworldcup2026":
             st.session_state.authenticated = True
             st.rerun()
         else:

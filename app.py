@@ -14,7 +14,7 @@ def get_base64_of_bin_file(bin_file):
 
 # Page config
 st.set_page_config(
-    page_title="Cleatus AI",
+    page_title="Herd AI",
     page_icon="🦊",
     layout="centered",
     initial_sidebar_state="collapsed"
@@ -27,7 +27,7 @@ if 'authenticated' not in st.session_state:
 # Get base64 encoded images
 bg_image = get_base64_of_bin_file(Path(__file__).parent / "assets/world-cup.jpg")
 logo_image = get_base64_of_bin_file(Path(__file__).parent / "assets/fox-sports.jpg")
-fandom_image = get_base64_of_bin_file(Path(__file__).parent / "assets/fox-fandom.jpg")
+login_bg_image = get_base64_of_bin_file(Path(__file__).parent / "assets/login-background.png")
 
 # Get base64 encoded fonts
 font_light = get_base64_of_bin_file(Path(__file__).parent / "assets/fonts/industry-font/IndustryTest-Light.otf")
@@ -82,7 +82,7 @@ st.markdown(f"""
     
     /* Background styling - simplified */
     .stApp {{
-        background: {f'linear-gradient(rgba(0,21,41,0.85), rgba(0,0,0,0.95)), url("data:image/jpeg;base64,{bg_image}") center/cover fixed' if st.session_state.authenticated and bg_image else 'linear-gradient(rgba(0,21,41,0.95), rgba(0,0,0,0.98)), radial-gradient(ellipse at top, rgba(0, 132, 255, 0.1) 0%, transparent 50%)'};
+        background: {f'linear-gradient(rgba(0,21,41,0.85), rgba(0,0,0,0.95)), url("data:image/jpeg;base64,{bg_image}") center/cover fixed' if st.session_state.authenticated and bg_image else f'linear-gradient(rgba(0,21,41,0.3), rgba(0,0,0,0.4)), url("data:image/png;base64,{login_bg_image}") center/cover fixed' if login_bg_image else 'linear-gradient(rgba(0,21,41,0.95), rgba(0,0,0,0.98))'};
     }}
     
     /* Headers - Polished typography */
@@ -92,15 +92,15 @@ st.markdown(f"""
         -webkit-text-fill-color: transparent;
         background-clip: text;
         font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        font-weight: 300;
+        font-weight: 600;
         text-align: center;
-        font-size: clamp(2.5rem, 5vw, 3.5rem);
-        margin-bottom: 0.5rem;
-        letter-spacing: 0.05em;
+        font-size: clamp(3.5rem, 5vw, 4.5rem);
+        margin-bottom: 1rem;
+        letter-spacing: 0.1em;
         line-height: 1.2;
         position: relative;
         padding-bottom: 0.5rem;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+        filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.8));
         transition: all 0.3s ease;
     }}
 
@@ -125,102 +125,132 @@ st.markdown(f"""
         opacity: {'0.6' if st.session_state.authenticated else '1'};
     }}
     
-    /* Login container */
-    .login-container {{
-        background: rgba(0, 21, 41, 0.85);
-        padding: 2rem;
-        border-radius: 16px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-        text-align: center;
-        backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }}
-    
-    .login-container h2 {{
-        color: white;
-        font-size: 1.5rem;
-        margin-bottom: 0.3rem;
-        font-weight: 300;
-        letter-spacing: 0.06em;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-        font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        text-transform: uppercase;
-    }}
-    
-    .login-container p {{
-        color: rgba(255,255,255,0.8);
-        font-size: 0.95rem;
-        font-weight: 400;
-        margin-bottom: 1.5rem;
-        font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        letter-spacing: 0.02em;
-    }}
+    /* Login container - REMOVED - form elements now appear directly on background */
     
     /* Button styling */
     .stButton > button {{
         background: linear-gradient(135deg, #0084FF 0%, #0066CC 100%);
         color: white;
         border: none;
-        padding: 0.85rem 3rem;
-        font-weight: 500;
-        border-radius: 8px;
+        padding: 1.2rem 4rem;
+        font-weight: 600;
+        border-radius: 10px;
         text-transform: uppercase;
         transition: all 0.3s ease;
         font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        letter-spacing: 0.08em;
-        font-size: 1rem;
-        box-shadow: 0 4px 12px rgba(0, 132, 255, 0.3);
+        letter-spacing: 0.12em;
+        font-size: 1.3rem;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
     }}
     
     .stButton > button:hover {{
         background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%);
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 132, 255, 0.4);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
     }}
     
     /* Input field styling */
-    .stTextInput input {{
-        border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 0.85rem 1rem;
-        background: rgba(255, 255, 255, 0.05);
-        color: white;
-        font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        font-size: 1rem;
-        letter-spacing: 0.02em;
-        transition: all 0.3s ease;
+    .stTextInput > div > div > input {{
+        border-radius: 10px !important;
+        border: 2px solid rgba(255, 255, 255, 0.4) !important;
+        padding: 1.2rem 1.5rem !important;
+        background: rgba(255, 255, 255, 0.15) !important;
+        color: white !important;
+        font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        font-size: 1.2rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.04em !important;
+        transition: all 0.3s ease !important;
+        backdrop-filter: blur(20px) !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+        -webkit-text-fill-color: white !important;
     }}
     
-    .stTextInput input:focus {{
-        border-color: rgba(0, 132, 255, 0.5);
-        outline: none;
-        background: rgba(255, 255, 255, 0.08);
-        box-shadow: 0 0 0 2px rgba(0, 132, 255, 0.2);
+    .stTextInput > div > div > input:focus {{
+        border-color: rgba(255, 255, 255, 0.6) !important;
+        outline: none !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.4) !important;
     }}
     
-    .stTextInput input::placeholder {{
-        color: rgba(255, 255, 255, 0.5);
-        font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    .stTextInput > div > div > input::placeholder {{
+        color: rgba(255, 255, 255, 0.7) !important;
+        font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        font-weight: 400 !important;
+        -webkit-text-fill-color: rgba(255, 255, 255, 0.7) !important;
+    }}
+    
+    /* Input field wrapper */
+    .stTextInput > div {{
+        background: transparent !important;
+        position: relative !important;
+    }}
+    
+    /* Password visibility toggle button */
+    .stTextInput > div > div > button {{
+        background: transparent !important;
+        border: none !important;
+        color: rgba(255, 255, 255, 0.7) !important;
+        right: 1rem !important;
+        position: absolute !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+    }}
+    
+    .stTextInput > div > div > button:hover {{
+        color: rgba(255, 255, 255, 1) !important;
     }}
     
     /* Footer - improved contrast */
     .footer {{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: {'rgba(0, 21, 41, 0.9)' if st.session_state.authenticated else 'transparent'};
+        backdrop-filter: blur(10px);
+        padding: 1rem 0;
         text-align: center;
-        color: {'rgba(255,255,255,0.8)' if st.session_state.authenticated else 'rgba(255,255,255,0.9)'};
-        margin-top: 0.5rem;
-        font-size: 0.85rem;
+        color: {'rgba(255,255,255,0.9)' if st.session_state.authenticated else 'rgba(255,255,255,0.9)'};
+        font-size: 1rem;
         font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.03em;
+        border-top: {'1px solid rgba(255, 255, 255, 0.1)' if st.session_state.authenticated else 'none'};
+        z-index: 100;
+    }}
+    
+    /* Fixed footer for login page */
+    .login-footer {{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: transparent;
+        padding: 1.5rem 0;
+        text-align: center;
+        color: rgba(255,255,255,1);
+        font-size: 1rem;
+        font-weight: 500;
+        font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        letter-spacing: 0.03em;
+        z-index: 100;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 1), 0 0 20px rgba(0, 0, 0, 0.8);
+    }}
+    
+    .login-footer span {{
+        font-size: 0.9rem;
+        opacity: 0.9;
     }}
     
     /* Authenticated view styling */
     .main-header {{
         text-align: center;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.25rem;
     }}
     
     .main-header img {{
-        margin: 0.5rem 0;
+        margin: 0.25rem 0;
+        width: 120px;
     }}
     
     .widget-container {{
@@ -233,16 +263,22 @@ st.markdown(f"""
     
     /* Error message styling */
     .stAlert {{
-        background: rgba(255, 68, 68, 0.1);
-        border: 1px solid rgba(255, 68, 68, 0.3);
-        border-radius: 8px;
-        color: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 68, 68, 0.2);
+        border: 2px solid rgba(255, 68, 68, 0.5);
+        border-radius: 10px;
+        color: rgba(255, 255, 255, 1);
         font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        max-width: 500px;
+        margin: 1rem auto 0 auto;
     }}
     
     /* Form container styling */
     .stForm {{
         background: transparent;
+        max-width: 500px;
+        margin: 0 auto;
     }}
     
     /* Hide default form help text */
@@ -261,45 +297,38 @@ st.markdown(f"""
         justify-content: center;
         align-items: center;
     }}
+    
+    /* Add padding to bottom when footer is fixed */
+    .main > div {{
+        padding-bottom: {'1rem' if st.session_state.authenticated else '6rem'};
+    }}
 </style>
 """, unsafe_allow_html=True)
 
 # Authentication check
 if not st.session_state.authenticated:
     # Login page
-    col1, col2, col3 = st.columns([1, 2, 1])
+    col1, col2, col3 = st.columns([0.5, 4, 0.5])
     
     with col2:
-        # Fox Sports Logo
-        if logo_image:
-            st.markdown(
-                f'<div style="text-align: center; margin-bottom: 1.5rem;">'
-                f'<img src="data:image/jpeg;base64,{logo_image}" style="width: 200px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">'
-                f'</div>',
-                unsafe_allow_html=True
-            )
+        # Add spacing at top
+        st.markdown('<div style="margin-top: 2rem;"></div>', unsafe_allow_html=True)
         
-        # Login Container
+        # Title without box
         st.markdown("""
-        <div class="login-container">
-            <h2>Cleatus AI</h2>
-            <p>Enter your credentials to access the AI Assistant</p>
-        </div>
+        <h2 style="color: white; font-size: 3.5rem; font-weight: 600; 
+                   letter-spacing: 0.12em; text-shadow: 0 4px 8px rgba(0, 0, 0, 1); 
+                   font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+                   text-transform: uppercase; text-align: center; margin-bottom: 2rem;">
+            HERD AI
+        </h2>
         """, unsafe_allow_html=True)
         
-        # Form with custom spacing
+        # Form without container
         with st.form("login_form", clear_on_submit=False):
             password = st.text_input("Password", type="password", placeholder="Enter password", label_visibility="collapsed")
             
-            # Add help text that's always visible
-            st.markdown("""
-            <p style="text-align: center; color: rgba(255, 255, 255, 0.6); 
-                      font-size: 0.85rem; margin: 0.5rem 0 1rem 0; 
-                      font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-                      letter-spacing: 0.02em;">
-                Enter password to enter Cleatus
-            </p>
-            """, unsafe_allow_html=True)
+            st.markdown('<div style="margin-top: 1.5rem;"></div>', unsafe_allow_html=True)
             
             submitted = st.form_submit_button("▸ LOGIN", use_container_width=True)
             
@@ -309,100 +338,64 @@ if not st.session_state.authenticated:
             elif submitted:
                 st.error("❌ Incorrect password. Please try again.")
         
-        # Add Fox Fandom image below the login form
-        if fandom_image:
-            st.markdown(
-                f'<div style="text-align: center; margin-top: 1.5rem;">'
-                f'<img src="data:image/jpeg;base64,{fandom_image}" style="width: 100%; max-width: 400px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">'
-                f'</div>',
-                unsafe_allow_html=True
-            )
-        
-        # Footer
-        st.markdown("""
-        <p class="footer" style="margin-top: 1.5rem;">
-            © 2025 Fox Sports. All rights reserved.<br>
-            <span style="font-size: 0.8rem; opacity: 0.8;">FIFA World Cup 2026™ Official Broadcaster</span>
-        </p>
-        """, unsafe_allow_html=True)
+    # Footer - pinned to bottom
+    st.markdown("""
+    <div class="login-footer">
+        © 2025 Fox Sports. All rights reserved.<br>
+        <span>FIFA World Cup 2026™ Official Broadcaster</span>
+    </div>
+    """, unsafe_allow_html=True)
 
 else:
     # Authenticated view
-    st.markdown(f"""
+    # Fox Sports logo in top right
+    if logo_image:
+        st.markdown(f"""
+        <div style="position: fixed; top: 1rem; right: 1rem; z-index: 100;">
+            <img src="data:image/jpeg;base64,{logo_image}" style="width: 100px; opacity: 0.9; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Main header
+    st.markdown("""
     <div class="main-header">
-        <h1>Cleatus AI</h1>
-        {f'<img src="data:image/jpeg;base64,{logo_image}" width="150">' if logo_image else ''}
+        <h1>Herd AI</h1>
     </div>
     """, unsafe_allow_html=True)
     
     # Container for multiple widgets with custom styling
     st.markdown("""
     <style>
-        /* Widget section styling */
-        .widget-section {
-            background: rgba(0, 33, 66, 0.4);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(0, 132, 255, 0.2);
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .widget-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .widget-label {
-            color: #FFFFFF;
-            font-size: 1.25rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
+        /* Widget container styling for horizontal layout */
+        .widget-container {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            justify-content: space-between;
+            align-items: start;
+            gap: 1rem;
+            margin-top: 1rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
-        .widget-label::before {
-            content: '▸';
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.6);
+        /* Main content area padding for fixed footer */
+        .stApp > div {
+            padding-bottom: 5rem !important;
         }
         
-        .widget-description {
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            line-height: 1.4;
-            font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
-        
-        /* Divider styling */
-        .section-divider {
-            height: 1px;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.2) 20%, 
-                rgba(255, 255, 255, 0.2) 80%, 
-                transparent
-            );
-            margin: 1.5rem 0;
+        /* Container max width for better layout */
+        .main .block-container {
+            max-width: 1600px !important;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
         }
         
         /* Make markdown headers visible on dark background */
         h3 {
             color: #FFFFFF !important;
-            font-size: 1.15rem !important;
-            font-weight: 500 !important;
-            margin-bottom: 0.1rem !important;
+            font-size: 1.4rem !important;
+            font-weight: 600 !important;
+            margin-bottom: 0.3rem !important;
             margin-top: 0 !important;
             padding-top: 0 !important;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
@@ -412,6 +405,7 @@ else:
             display: inline-block !important;
             font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
             letter-spacing: 0.03em !important;
+            white-space: nowrap !important;
         }
         
         /* Hover effect for extra polish */
@@ -424,12 +418,15 @@ else:
         p em {
             color: rgba(255, 255, 255, 0.85) !important;
             font-style: normal !important;
-            font-size: 0.9rem !important;
+            font-size: 1.1rem !important;
             display: block;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.8rem;
             margin-top: 0;
             line-height: 1.3;
             font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
         }
         
         /* Hide horizontal rule dividers */
@@ -474,44 +471,122 @@ else:
         .main > div {
             padding-top: 1rem !important;
         }
+        
+        /* Column container styling for horizontal layout */
+        [data-testid="column"] {
+            padding: 1.5rem !important;
+            background: rgba(0, 33, 66, 0.2) !important;
+            border-radius: 12px !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(10px) !important;
+            position: relative !important;
+        }
+        
+        /* White dividers between columns */
+        [data-testid="column"]:not(:last-child)::after {
+            content: '' !important;
+            position: absolute !important;
+            right: -2rem !important;
+            top: 20% !important;
+            height: 60% !important;
+            width: 1px !important;
+            background: rgba(255, 255, 255, 0.3) !important;
+        }
+        
+        [data-testid="column"]:first-child {
+            margin-right: 2rem !important;
+        }
+        
+        [data-testid="column"]:last-child {
+            margin-left: 2rem !important;
+        }
+        
+        [data-testid="column"]:nth-child(2) {
+            margin: 0 2rem !important;
+        }
+        
+        /* Ensure widgets fill column width */
+        [data-testid="column"] iframe {
+            width: 100% !important;
+        }
+        
+        /* Center align content in columns */
+        [data-testid="column"] > div {
+            text-align: center;
+        }
+        
+        /* Responsive design for smaller screens */
+        @media (max-width: 1024px) {
+            [data-testid="column"] {
+                margin-bottom: 1.5rem !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+            
+            [data-testid="column"]:not(:last-child)::after {
+                display: none !important;
+            }
+            
+            h3 {
+                font-size: 1.2rem !important;
+            }
+            
+            p em {
+                font-size: 1rem !important;
+            }
+            
+            h1 {
+                font-size: clamp(2.5rem, 4vw, 3.5rem) !important;
+            }
+        }
     </style>
     """, unsafe_allow_html=True)
     
-    # Widget 1 - Colin World Cup
-    st.markdown("### Colin World Cup")
-    st.markdown("*Get help with World Cup stats, team information, and tournament insights*")
-    widget1_html = """
-    <elevenlabs-convai 
-        agent-id="agent_01jyj2mn17e2jvdqkmrh6jzfd1"
-        variant="expanded"
-    ></elevenlabs-convai>
-    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-    """
-    html(widget1_html, height=320)
+    # Container for widgets with max width
+    container = st.container()
     
-    # Widget 2 - Colin General Sports
-    st.markdown("### Colin General Sports")
-    st.markdown("*Your go-to expert for all sports - NFL, NBA, MLB, NHL and more*")
-    widget2_html = """
-    <elevenlabs-convai 
-        agent-id="agent_01k084d7dtfyaazh2e27y2kzcy"
-        variant="expanded"
-    ></elevenlabs-convai>
-    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-    """
-    html(widget2_html, height=320)
-    
-    # Widget 3 - Colin Smack Talk
-    st.markdown("### Colin Smack Talk")
-    st.markdown("*Ready to talk trash about your rivals and defend your team with passion*")
-    widget3_html = """
-    <elevenlabs-convai 
-        agent-id="agent_01jyj64kjyenyahcts8pcwckxn"
-        variant="expanded"
-    ></elevenlabs-convai>
-    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-    """
-    html(widget3_html, height=320)
+    with container:
+        # Create three columns for horizontal layout with more spacing
+        col1, col2, col3 = st.columns([1, 1, 1], gap="large")
+        
+        # Widget 1 - Colin World Cup
+        with col1:
+            st.markdown("### Colin World Cup")
+            st.markdown("*World Cup stats & insights*")
+            widget1_html = """
+            <elevenlabs-convai 
+                agent-id="agent_01jyj2mn17e2jvdqkmrh6jzfd1"
+                variant="expanded"
+            ></elevenlabs-convai>
+            <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+            """
+            html(widget1_html, height=260)
+        
+        # Widget 2 - Colin General Sports
+        with col2:
+            st.markdown("### Colin General Sports")
+            st.markdown("*All sports coverage*")
+            widget2_html = """
+            <elevenlabs-convai 
+                agent-id="agent_01k084d7dtfyaazh2e27y2kzcy"
+                variant="expanded"
+            ></elevenlabs-convai>
+            <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+            """
+            html(widget2_html, height=260)
+        
+        # Widget 3 - Colin Smack Talk
+        with col3:
+            st.markdown("### Colin Smack Talk")
+            st.markdown("*Sports banter & rivalry*")
+            widget3_html = """
+            <elevenlabs-convai 
+                agent-id="agent_01jyj64kjyenyahcts8pcwckxn"
+                variant="expanded"
+            ></elevenlabs-convai>
+            <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+            """
+            html(widget3_html, height=260)
     
     st.markdown("""
     <p class="footer">

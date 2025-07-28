@@ -369,11 +369,11 @@ else:
         /* Widget container styling for horizontal layout */
         .widget-container {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: start;
-            gap: 1rem;
+            gap: 3rem;
             margin-top: 1rem;
-            max-width: 1400px;
+            max-width: 1200px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -385,7 +385,7 @@ else:
         
         /* Container max width for better layout */
         .main .block-container {
-            max-width: 1600px !important;
+            max-width: 1200px !important;
             padding-left: 2rem !important;
             padding-right: 2rem !important;
         }
@@ -482,11 +482,11 @@ else:
             position: relative !important;
         }
         
-        /* White dividers between columns */
-        [data-testid="column"]:not(:last-child)::after {
+        /* White divider between columns */
+        [data-testid="column"]:first-child::after {
             content: '' !important;
             position: absolute !important;
-            right: -2rem !important;
+            right: -1.5rem !important;
             top: 20% !important;
             height: 60% !important;
             width: 1px !important;
@@ -494,15 +494,11 @@ else:
         }
         
         [data-testid="column"]:first-child {
-            margin-right: 2rem !important;
+            margin-right: 1.5rem !important;
         }
         
         [data-testid="column"]:last-child {
-            margin-left: 2rem !important;
-        }
-        
-        [data-testid="column"]:nth-child(2) {
-            margin: 0 2rem !important;
+            margin-left: 1.5rem !important;
         }
         
         /* Ensure widgets fill column width */
@@ -523,7 +519,7 @@ else:
                 margin-right: 0 !important;
             }
             
-            [data-testid="column"]:not(:last-child)::after {
+            [data-testid="column"]:first-child::after {
                 display: none !important;
             }
             
@@ -546,8 +542,8 @@ else:
     container = st.container()
     
     with container:
-        # Create three columns for horizontal layout with more spacing
-        col1, col2, col3 = st.columns([1, 1, 1], gap="large")
+        # Create two columns for horizontal layout with more spacing
+        col1, col2 = st.columns([1, 1], gap="large")
         
         # Widget 1 - Colin World Cup
         with col1:
@@ -575,18 +571,7 @@ else:
             """
             html(widget2_html, height=260)
         
-        # Widget 3 - Colin Smack Talk
-        with col3:
-            st.markdown("### Colin Smack Talk")
-            st.markdown("*Sports banter & rivalry*")
-            widget3_html = """
-            <elevenlabs-convai 
-                agent-id="agent_01jyj64kjyenyahcts8pcwckxn"
-                variant="expanded"
-            ></elevenlabs-convai>
-            <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-            """
-            html(widget3_html, height=260)
+
     
     st.markdown("""
     <p class="footer">

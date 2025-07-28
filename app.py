@@ -154,8 +154,8 @@ st.markdown(f"""
         border-radius: 10px !important;
         border: 2px solid rgba(255, 255, 255, 0.4) !important;
         padding: 1.2rem 1.5rem !important;
-        background: rgba(255, 255, 255, 0.15) !important;
-        color: white !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        color: #000000 !important;
         font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
         font-size: 1.2rem !important;
         font-weight: 500 !important;
@@ -163,21 +163,21 @@ st.markdown(f"""
         transition: all 0.3s ease !important;
         backdrop-filter: blur(20px) !important;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
-        -webkit-text-fill-color: white !important;
+        -webkit-text-fill-color: #000000 !important;
     }}
     
     .stTextInput > div > div > input:focus {{
-        border-color: rgba(255, 255, 255, 0.6) !important;
+        border-color: rgba(0, 132, 255, 0.8) !important;
         outline: none !important;
-        background: rgba(255, 255, 255, 0.2) !important;
-        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+        background: rgba(255, 255, 255, 1) !important;
+        box-shadow: 0 0 0 3px rgba(0, 132, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.4) !important;
     }}
     
     .stTextInput > div > div > input::placeholder {{
-        color: rgba(255, 255, 255, 0.7) !important;
+        color: rgba(0, 0, 0, 0.5) !important;
         font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
         font-weight: 400 !important;
-        -webkit-text-fill-color: rgba(255, 255, 255, 0.7) !important;
+        -webkit-text-fill-color: rgba(0, 0, 0, 0.5) !important;
     }}
     
     /* Input field wrapper */
@@ -190,7 +190,7 @@ st.markdown(f"""
     .stTextInput > div > div > button {{
         background: transparent !important;
         border: none !important;
-        color: rgba(255, 255, 255, 0.7) !important;
+        color: rgba(0, 0, 0, 0.6) !important;
         right: 1rem !important;
         position: absolute !important;
         top: 50% !important;
@@ -198,7 +198,7 @@ st.markdown(f"""
     }}
     
     .stTextInput > div > div > button:hover {{
-        color: rgba(255, 255, 255, 1) !important;
+        color: rgba(0, 0, 0, 0.9) !important;
     }}
     
     /* Footer - improved contrast */
@@ -373,7 +373,7 @@ else:
             align-items: start;
             gap: 3rem;
             margin-top: 1rem;
-            max-width: 1200px;
+            max-width: 1400px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -385,7 +385,7 @@ else:
         
         /* Container max width for better layout */
         .main .block-container {
-            max-width: 1200px !important;
+            max-width: 1400px !important;
             padding-left: 2rem !important;
             padding-right: 2rem !important;
         }
@@ -482,23 +482,24 @@ else:
             position: relative !important;
         }
         
-        /* White divider between columns */
-        [data-testid="column"]:first-child::after {
+        /* White divider in middle spacer column */
+        [data-testid="column"]:nth-child(3) {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+        
+        [data-testid="column"]:nth-child(3)::after {
             content: '' !important;
-            position: absolute !important;
-            right: -1.5rem !important;
-            top: 20% !important;
-            height: 60% !important;
             width: 1px !important;
+            height: 200px !important;
             background: rgba(255, 255, 255, 0.3) !important;
         }
         
-        [data-testid="column"]:first-child {
-            margin-right: 1.5rem !important;
-        }
-        
-        [data-testid="column"]:last-child {
-            margin-left: 1.5rem !important;
+        /* Remove margins from content columns */
+        [data-testid="column"]:nth-child(2),
+        [data-testid="column"]:nth-child(4) {
+            margin: 0 !important;
         }
         
         /* Ensure widgets fill column width */
@@ -519,7 +520,7 @@ else:
                 margin-right: 0 !important;
             }
             
-            [data-testid="column"]:first-child::after {
+            [data-testid="column"]:nth-child(3)::after {
                 display: none !important;
             }
             
@@ -542,8 +543,8 @@ else:
     container = st.container()
     
     with container:
-        # Create two columns for horizontal layout with more spacing
-        col1, col2 = st.columns([1, 1], gap="large")
+        # Create centered layout with proper spacing
+        spacer1, col1, spacer2, col2, spacer3 = st.columns([0.5, 2, 1, 2, 0.5], gap="medium")
         
         # Widget 1 - Colin World Cup
         with col1:

@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit.components.v1 import html
 import base64
 from pathlib import Path
+import time
 
 # Function to load and encode image to Base64
 @st.cache_data
@@ -11,6 +12,58 @@ def get_base64_of_bin_file(bin_file):
             return base64.b64encode(f.read()).decode()
     except FileNotFoundError:
         return None
+
+# Cookie management functions using localStorage (more reliable with Streamlit)
+def set_auth_cookie(value, days=30):
+    """Set authentication cookie using JavaScript"""
+    js_code = f"""
+    <script>
+        localStorage.setItem('herd_ai_auth', '{value}');
+        // Also set a cookie for server-side persistence
+        const expiry = new Date();
+        expiry.setTime(expiry.getTime() + ({days} * 24 * 60 * 60 * 1000));
+        document.cookie = "herd_ai_auth={value}; expires=" + expiry.toUTCString() + "; path=/; SameSite=Lax";
+    </script>
+    """
+    html(js_code)
+
+def check_auth_cookie():
+    """Check if authentication cookie exists and redirect if authenticated"""
+    js_code = """
+    <script>
+        // Check localStorage first
+        const authValue = localStorage.getItem('herd_ai_auth');
+        if (authValue === 'authenticated') {
+            // Redirect with authentication parameter
+            const url = new URL(window.location);
+            url.searchParams.set('authenticated', 'true');
+            window.location.href = url.toString();
+        } else {
+            // Check cookie as backup
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                const [name, value] = cookie.trim().split('=');
+                if (name === 'herd_ai_auth' && value === 'authenticated') {
+                    const url = new URL(window.location);
+                    url.searchParams.set('authenticated', 'true');
+                    window.location.href = url.toString();
+                    break;
+                }
+            }
+        }
+    </script>
+    """
+    html(js_code)
+
+def clear_auth_cookie():
+    """Clear authentication cookie using JavaScript"""
+    js_code = """
+    <script>
+        localStorage.removeItem('herd_ai_auth');
+        document.cookie = "herd_ai_auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    </script>
+    """
+    html(js_code)
 
 # Page config
 st.set_page_config(
@@ -23,6 +76,16 @@ st.set_page_config(
 # Initialize session state
 if 'authenticated' not in st.session_state:
     st.session_state.authenticated = False
+
+# Check for authentication cookie/localStorage on first load
+if not st.session_state.authenticated:
+    check_auth_cookie()
+    # Check for authentication query parameter
+    query_params = st.query_params
+    if query_params.get('authenticated') == 'true':
+        st.session_state.authenticated = True
+        # Clear the query param to clean up the URL
+        st.query_params.clear()
 
 # Get base64 encoded images
 bg_image = get_base64_of_bin_file(Path(__file__).parent / "assets/world-cup.jpg")
@@ -298,6 +361,7 @@ st.markdown(f"""
         align-items: center;
     }}
     
+
     /* Add padding to bottom when footer is fixed */
     .main > div {{
         padding-bottom: {'1rem' if st.session_state.authenticated else '6rem'};
@@ -331,9 +395,10 @@ if not st.session_state.authenticated:
             st.markdown('<div style="margin-top: 1.5rem;"></div>', unsafe_allow_html=True)
             
             submitted = st.form_submit_button("▸ LOGIN", use_container_width=True)
-            
+
             if submitted and password == "fsworldcup2026":
                 st.session_state.authenticated = True
+                set_auth_cookie("authenticated", days=30)  # Cookie expires in 30 days
                 st.rerun()
             elif submitted:
                 st.error("❌ Incorrect password. Please try again.")
@@ -348,6 +413,7 @@ if not st.session_state.authenticated:
 
 else:
     # Authenticated view
+
     # Fox Sports logo in top right
     if logo_image:
         st.markdown(f"""
@@ -482,25 +548,8 @@ else:
             position: relative !important;
         }
         
-        /* White divider in middle spacer column */
-        [data-testid="column"]:nth-child(3) {
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-        }
-        
-        [data-testid="column"]:nth-child(3)::after {
-            content: '' !important;
-            width: 1px !important;
-            height: 200px !important;
-            background: rgba(255, 255, 255, 0.3) !important;
-        }
-        
-        /* Remove margins from content columns */
-        [data-testid="column"]:nth-child(2),
-        [data-testid="column"]:nth-child(4) {
-            margin: 0 !important;
-        }
+        /* Grid column defaults for all quadrants */
+        /* No extra dividers or nth-child overrides needed */
         
         /* Ensure widgets fill column width */
         [data-testid="column"] iframe {
@@ -520,9 +569,7 @@ else:
                 margin-right: 0 !important;
             }
             
-            [data-testid="column"]:nth-child(3)::after {
-                display: none !important;
-            }
+            /* No divider overrides required in responsive mode */
             
             h3 {
                 font-size: 1.2rem !important;
@@ -543,11 +590,11 @@ else:
     container = st.container()
     
     with container:
-        # Create centered layout with proper spacing
-        spacer1, col1, spacer2, col2, spacer3 = st.columns([0.5, 2, 1, 2, 0.5], gap="medium")
+        # Top row
+        top_left, top_right = st.columns(2, gap="large")
         
-        # Widget 1 - Colin World Cup
-        with col1:
+        # Widget 1 - Colin World Cup (top-left)
+        with top_left:
             st.markdown("### Colin World Cup")
             st.markdown("*World Cup stats & insights*")
             widget1_html = """
@@ -559,8 +606,8 @@ else:
             """
             html(widget1_html, height=260)
         
-        # Widget 2 - Colin General Sports
-        with col2:
+        # Widget 2 - Colin General Sports (top-right)
+        with top_right:
             st.markdown("### Colin General Sports")
             st.markdown("*All sports coverage*")
             widget2_html = """
@@ -571,6 +618,26 @@ else:
             <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
             """
             html(widget2_html, height=260)
+        
+        # Spacer between rows
+        st.markdown('<div style="height: 1.5rem;"></div>', unsafe_allow_html=True)
+        
+        # Bottom row
+        bottom_left, bottom_right = st.columns(2, gap="large")
+        
+        # Widget 3 - Additional Agent (bottom-left)
+        with bottom_left:
+            st.markdown("### Colin Additional Agent")
+            st.markdown("*Custom agent*")
+            widget3_html = """
+            <elevenlabs-convai agent-id="agent_6601k4zk42ebeagrspzca4mvebn8"></elevenlabs-convai>
+            <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+            """
+            html(widget3_html, height=400)
+        
+        # Bottom-right quadrant intentionally left unused for now
+        with bottom_right:
+            st.empty()
         
 
     

@@ -88,9 +88,9 @@ if not st.session_state.authenticated:
         st.query_params.clear()
 
 # Get base64 encoded images
-bg_image = get_base64_of_bin_file(Path(__file__).parent / "assets/world-cup.jpg")
+bg_image = get_base64_of_bin_file(Path(__file__).parent / "assets/TheHerd_Final_wide.png")
 logo_image = get_base64_of_bin_file(Path(__file__).parent / "assets/fox-sports.jpg")
-login_bg_image = get_base64_of_bin_file(Path(__file__).parent / "assets/login-background.png")
+login_bg_image = get_base64_of_bin_file(Path(__file__).parent / "assets/TheHerd_Final_wide.png")
 
 # Get base64 encoded fonts
 font_light = get_base64_of_bin_file(Path(__file__).parent / "assets/fonts/industry-font/IndustryTest-Light.otf")
@@ -145,7 +145,7 @@ st.markdown(f"""
     
     /* Background styling - simplified */
     .stApp {{
-        background: {f'linear-gradient(rgba(0,21,41,0.85), rgba(0,0,0,0.95)), url("data:image/jpeg;base64,{bg_image}") center/cover fixed' if st.session_state.authenticated and bg_image else f'linear-gradient(rgba(0,21,41,0.3), rgba(0,0,0,0.4)), url("data:image/png;base64,{login_bg_image}") center/cover fixed' if login_bg_image else 'linear-gradient(rgba(0,21,41,0.95), rgba(0,0,0,0.98))'};
+        background: {f'linear-gradient(rgba(0,21,41,0.85), rgba(0,0,0,0.95)), url("data:image/png;base64,{bg_image}") center/cover fixed' if st.session_state.authenticated and bg_image else f'linear-gradient(rgba(0,21,41,0.3), rgba(0,0,0,0.4)), url("data:image/png;base64,{login_bg_image}") center/cover fixed' if login_bg_image else 'linear-gradient(rgba(0,21,41,0.95), rgba(0,0,0,0.98))'};
     }}
     
     /* Headers - Polished typography */
@@ -590,54 +590,14 @@ else:
     container = st.container()
     
     with container:
-        # Top row
-        top_left, top_right = st.columns(2, gap="large")
-        
-        # Widget 1 - Colin World Cup (top-left)
-        with top_left:
-            st.markdown("### Colin World Cup")
-            st.markdown("*World Cup stats & insights*")
-            widget1_html = """
-            <elevenlabs-convai 
-                agent-id="agent_01jyj2mn17e2jvdqkmrh6jzfd1"
-                variant="expanded"
-            ></elevenlabs-convai>
-            <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-            """
-            html(widget1_html, height=260)
-        
-        # Widget 2 - Colin General Sports (top-right)
-        with top_right:
-            st.markdown("### Colin General Sports")
-            st.markdown("*All sports coverage*")
-            widget2_html = """
-            <elevenlabs-convai 
-                agent-id="agent_01k084d7dtfyaazh2e27y2kzcy"
-                variant="expanded"
-            ></elevenlabs-convai>
-            <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-            """
-            html(widget2_html, height=260)
-        
-        # Spacer between rows
-        st.markdown('<div style="height: 1.5rem;"></div>', unsafe_allow_html=True)
-        
-        # Bottom row
-        bottom_left, bottom_right = st.columns(2, gap="large")
-        
-        # Widget 3 - Additional Agent (bottom-left)
-        with bottom_left:
-            st.markdown("### Colin Additional Agent")
-            st.markdown("*Custom agent*")
-            widget3_html = """
-            <elevenlabs-convai agent-id="agent_6601k4zk42ebeagrspzca4mvebn8"></elevenlabs-convai>
-            <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-            """
-            html(widget3_html, height=400)
-        
-        # Bottom-right quadrant intentionally left unused for now
-        with bottom_right:
-            st.empty()
+        # Single widget centered
+        st.markdown("### Colin Additional Agent")
+        st.markdown("*Custom agent*")
+        widget_html = """
+        <elevenlabs-convai agent-id="agent_6601k4zk42ebeagrspzca4mvebn8"></elevenlabs-convai>
+        <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+        """
+        html(widget_html, height=600)
         
 
     

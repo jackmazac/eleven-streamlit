@@ -432,67 +432,61 @@ else:
     # Container for multiple widgets with custom styling
     st.markdown("""
     <style>
-        /* Widget container styling for horizontal layout */
-        .widget-container {
-            display: flex;
-            justify-content: center;
-            align-items: start;
-            gap: 3rem;
-            margin-top: 1rem;
-            max-width: 1400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        /* Main content area padding for fixed footer */
+        /* Main content area optimization */
         .stApp > div {
-            padding-bottom: 5rem !important;
+            padding-bottom: 6rem !important;
         }
         
-        /* Container max width for better layout */
+        /* Container max width for better full-screen layout */
         .main .block-container {
-            max-width: 1400px !important;
-            padding-left: 2rem !important;
-            padding-right: 2rem !important;
+            max-width: 1600px !important;
+            padding-left: 3rem !important;
+            padding-right: 3rem !important;
+            padding-top: 0.5rem !important;
         }
         
-        /* Make markdown headers visible on dark background */
+        /* Optimize main content padding */
+        .main > div {
+            padding-top: 0.5rem !important;
+        }
+        
+        /* Make markdown headers visible with improved sizing */
         h3 {
             color: #FFFFFF !important;
-            font-size: 1.4rem !important;
+            font-size: 1.8rem !important;
             font-weight: 600 !important;
-            margin-bottom: 0.3rem !important;
+            margin-bottom: 0.5rem !important;
             margin-top: 0 !important;
             padding-top: 0 !important;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9) !important;
             transition: all 0.3s ease !important;
             cursor: default !important;
             position: relative !important;
             display: inline-block !important;
             font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
-            letter-spacing: 0.03em !important;
+            letter-spacing: 0.05em !important;
             white-space: nowrap !important;
         }
         
         /* Hover effect for extra polish */
         h3:hover {
             transform: translateY(-1px) !important;
-            text-shadow: 0 3px 6px rgba(0, 0, 0, 1) !important;
+            text-shadow: 0 3px 8px rgba(0, 0, 0, 1) !important;
         }
         
-        /* Make italic descriptions visible */
+        /* Make italic descriptions visible with better sizing */
         p em {
-            color: rgba(255, 255, 255, 0.85) !important;
+            color: rgba(255, 255, 255, 0.9) !important;
             font-style: normal !important;
-            font-size: 1.1rem !important;
+            font-size: 1.2rem !important;
             display: block;
-            margin-bottom: 0.8rem;
-            margin-top: 0;
-            line-height: 1.3;
+            margin-bottom: 1.2rem;
+            margin-top: 0.2rem;
+            line-height: 1.4;
             font-family: 'Industry', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
+            font-weight: 400 !important;
+            letter-spacing: 0.02em !important;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
         }
         
         /* Hide horizontal rule dividers */
@@ -516,11 +510,12 @@ else:
             padding: 0 !important;
         }
         
-        /* Remove iframe container spacing */
+        /* Optimize iframe container for full-screen experience */
         iframe {
             margin: 0 !important;
             padding: 0 !important;
             display: block !important;
+            border-radius: 12px !important;
         }
         
         .stComponent {
@@ -533,46 +528,36 @@ else:
             gap: 0 !important;
         }
         
-        /* Additional spacing overrides */
-        .main > div {
-            padding-top: 1rem !important;
+        /* Widget container with better styling */
+        div[data-testid="stVerticalBlock"] {
+            background: rgba(0, 33, 66, 0.5) !important;
+            border-radius: 16px !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            backdrop-filter: blur(8px) !important;
+            padding: 2.5rem 3rem !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+            max-width: 1500px !important;
+            margin: 0 auto !important;
         }
         
-        /* Column container styling for horizontal layout */
-        [data-testid="column"] {
-            padding: 1.5rem !important;
-            background: rgba(0, 33, 66, 0.2) !important;
-            border-radius: 12px !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            backdrop-filter: blur(10px) !important;
-            position: relative !important;
-        }
-        
-        /* Grid column defaults for all quadrants */
-        /* No extra dividers or nth-child overrides needed */
-        
-        /* Ensure widgets fill column width */
-        [data-testid="column"] iframe {
-            width: 100% !important;
-        }
-        
-        /* Center align content in columns */
-        [data-testid="column"] > div {
+        /* Center align content */
+        div[data-testid="stVerticalBlock"] > div > div {
             text-align: center;
         }
         
         /* Responsive design for smaller screens */
         @media (max-width: 1024px) {
-            [data-testid="column"] {
-                margin-bottom: 1.5rem !important;
-                margin-left: 0 !important;
-                margin-right: 0 !important;
+            .main .block-container {
+                padding-left: 1.5rem !important;
+                padding-right: 1.5rem !important;
             }
             
-            /* No divider overrides required in responsive mode */
+            div[data-testid="stVerticalBlock"] {
+                padding: 1.5rem !important;
+            }
             
             h3 {
-                font-size: 1.2rem !important;
+                font-size: 1.5rem !important;
             }
             
             p em {
@@ -583,6 +568,17 @@ else:
                 font-size: clamp(2.5rem, 4vw, 3.5rem) !important;
             }
         }
+        
+        /* Extra large screens optimization */
+        @media (min-width: 1920px) {
+            .main .block-container {
+                max-width: 1800px !important;
+            }
+            
+            div[data-testid="stVerticalBlock"] {
+                max-width: 1700px !important;
+            }
+        }
     </style>
     """, unsafe_allow_html=True)
     
@@ -591,13 +587,13 @@ else:
     
     with container:
         # Single widget centered
-        st.markdown("### Colin Additional Agent")
-        st.markdown("*Custom agent*")
+        st.markdown("### Colin Cowherd AI Sports Agent")
+        st.markdown("*Your intelligent companion for FIFA World Cup 2026™ insights, powered by Colin Cowherd's voice*")
         widget_html = """
         <elevenlabs-convai agent-id="agent_6601k4zk42ebeagrspzca4mvebn8"></elevenlabs-convai>
         <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
         """
-        html(widget_html, height=600)
+        html(widget_html, height=700)
         
 
     
